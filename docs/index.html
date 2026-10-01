@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>抽象代数 · 结构之美 — 3 分 30 秒宣传片</title>
+<meta name="description" content="用对称群、单位根、魔方、同态与核、Burnside 计数、椭圆曲线与伽罗瓦，讲抽象代数的美。全画面由代码逐帧渲染。" />
+<meta property="og:title" content="抽象代数 · 结构之美" />
+<meta property="og:description" content="一条 3 分 30 秒的中文宣传片：每个概念都落在一件能看见的东西上。全画面由代码逐帧渲染。" />
+<meta property="og:image" content="poster.png" />
+<meta property="og:type" content="video.movie" />
+<style>
+  :root {
+    --bg: #05060d;
+    --fg: #e8f0ff;
+    --dim: #93a4c4;
+    --cyan: #41e7ff;
+    --gold: #ffc861;
+    --magenta: #ff3fa4;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: radial-gradient(1200px 700px at 50% -10%, #101a33 0%, var(--bg) 55%, #03040a 100%);
+    color: var(--fg);
+    font-family: "Microsoft YaHei", "Noto Sans SC", -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 48px 20px 96px; }
+  header { text-align: center; margin-bottom: 34px; }
+  h1 {
+    font-size: clamp(30px, 5.4vw, 52px);
+    letter-spacing: .18em;
+    margin: 0 0 10px;
+    background: linear-gradient(92deg, var(--cyan), var(--gold) 52%, var(--magenta));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .sub { color: var(--dim); letter-spacing: .14em; font-size: clamp(13px, 1.7vw, 15px); }
+  .player {
+    position: relative;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, .7), 0 0 0 1px rgba(65, 231, 255, .18);
+    background: #000;
+  }
+  video { display: block; width: 100%; height: auto; background: #000; }
+  .meta {
+    display: flex; flex-wrap: wrap; gap: 10px 22px; justify-content: center;
+    margin: 18px 0 8px; color: var(--dim); font-size: 14px;
+    font-family: Consolas, "Cascadia Mono", monospace;
+  }
+  .meta b { color: var(--cyan); font-weight: 600; }
+  .acts { display: flex; gap: 14px; justify-content: center; margin: 26px 0 8px; flex-wrap: wrap; }
+  a.btn {
+    display: inline-block; padding: 11px 22px; border-radius: 999px;
+    text-decoration: none; font-size: 15px; letter-spacing: .06em;
+    border: 1px solid rgba(65, 231, 255, .45); color: var(--fg);
+    background: rgba(65, 231, 255, .08); transition: .18s;
+  }
+  a.btn:hover { background: rgba(65, 231, 255, .18); transform: translateY(-1px); }
+  a.btn.gold { border-color: rgba(255, 200, 97, .5); background: rgba(255, 200, 97, .09); }
+  a.btn.gold:hover { background: rgba(255, 200, 97, .18); }
+  h2 { font-size: 20px; letter-spacing: .1em; margin: 52px 0 14px; color: var(--fg); }
+  h2::before { content: ""; display: inline-block; width: 22px; height: 2px; background: var(--cyan); vertical-align: 5px; margin-right: 12px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid rgba(255, 255, 255, .08); vertical-align: top; }
+  th { color: var(--dim); font-weight: 500; letter-spacing: .06em; }
+  td b { color: var(--gold); font-weight: 600; }
+  code {
+    font-family: Consolas, "Cascadia Mono", monospace; font-size: .92em;
+    background: rgba(255, 255, 255, .07); padding: 2px 6px; border-radius: 5px; color: var(--cyan);
+  }
+  .quote { text-align: center; color: var(--dim); letter-spacing: .12em; margin: 56px 0 10px; font-size: clamp(15px, 2.1vw, 19px); }
+  .quote b { color: var(--fg); font-weight: 600; }
+  footer { text-align: center; color: #5f6f8c; font-size: 13px; margin-top: 40px; letter-spacing: .08em; }
+  footer a { color: #7f92b3; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>抽象代数 · 结构之美</h1>
+    <div class="sub">3 分 30 秒 · 1920×1080 · 30fps · 全画面由代码逐帧渲染</div>
+  </header>
+
+  <div class="player">
+    <video id="film" controls preload="metadata" playsinline poster="poster.png">
+      <source src="https://media.githubusercontent.com/media/EliteOtaku/beauty-of-structure/main/out/abstract-algebra-film_1080p.mp4" type="video/mp4" />
+      你的浏览器不支持内嵌播放，请
+      <a href="https://media.githubusercontent.com/media/EliteOtaku/beauty-of-structure/main/out/abstract-algebra-film_1080p.mp4">直接下载成片</a>。
+    </video>
+  </div>
+
+  <div class="meta">
+    <span><b>6300</b> 帧</span>
+    <span><b>210.000</b> s</span>
+    <span>H.264 + AAC</span>
+    <span><b>-21.5</b> LUFS</span>
+    <span>47 MB</span>
+  </div>
+
+  <div class="acts">
+    <a class="btn gold" href="https://github.com/EliteOtaku/beauty-of-structure">源码仓库</a>
+    <a class="btn" href="https://media.githubusercontent.com/media/EliteOtaku/beauty-of-structure/main/out/abstract-algebra-film_1080p.mp4">下载成片</a>
+    <a class="btn" href="poster.png">封面帧</a>
+  </div>
+
+  <h2>每个概念都落在一件能看见的东西上</h2>
+  <table>
+    <tr><th>时间</th><th>场次</th><th>具体入口</th><th>数学点</th></tr>
+    <tr><td>0:00</td><td>对称</td><td>粒子汇聚成正方形，8 种对称绕它排开</td><td><b>D₄</b>、群公理、凯莱表即闭包</td></tr>
+    <tr><td>0:38</td><td>循环</td><td>圆上 45° 一跳、8 次单位根连线</td><td><b>C₈</b>、轨道-稳定子、U(8)</td></tr>
+    <tr><td>1:08</td><td>置换</td><td>1–7 重新编号、7! 粒子云、转动的魔方</td><td><b>S₇</b>、循环分解、魔方 4.3×10¹⁹ 态</td></tr>
+    <tr><td>1:42</td><td>同态</td><td>两圆之间流动的映射线、被压成一点的核</td><td>核与像、商群、<b>|G|=|ker φ|·|im φ|</b></td></tr>
+    <tr><td>2:18</td><td>计数</td><td>64 个染色方案粘成 13 条轨道</td><td>群作用、<b>Burnside 引理</b>（13 / 92 / 30）</td></tr>
+    <tr><td>2:52</td><td>终章</td><td>617 位大数、椭圆曲线弦切作图、五次方程的根</td><td>RSA / ECC、<b>伽罗瓦群 S₅ 不可解</b></td></tr>
+  </table>
+
+  <h2>技术要点</h2>
+  <p style="color:var(--dim);font-size:15px">
+    没有用任何动画软件。每一帧由 <code>draw(t)</code> 纯函数画出，随机数取自固定种子，
+    因此同一时刻的画面可重放、可并行、可只重渲染某一场；4 个 headless Chromium 并行渲染，
+    帧经 WebSocket 直通 ffmpeg，6300 帧 1.9 分钟出片。配乐由 <code>numpy/scipy</code> 合成
+    （和声垫 / 钟 / Karplus-Strong 拨弦，无采样素材），旁白 8 句中文由 Windows SAPI 合成并与音乐做侧链闪避。
+    详见 <a href="https://github.com/EliteOtaku/beauty-of-structure" style="color:#7fb6d9">仓库 README</a>。
+  </p>
+
+  <div class="quote">有解的东西可以被算出来，<b>有结构的东西才能被理解</b>。</div>
+
+  <footer>
+    MIT License · <a href="https://github.com/EliteOtaku/beauty-of-structure">github.com/EliteOtaku/beauty-of-structure</a>
+  </footer>
+</div>
+
+<script>
+  // 若内嵌播放失败（网络/编码器限制），自动提示直接下载
+  const v = document.getElementById('film');
+  v.addEventListener('error', () => {
+    const p = document.createElement('p');
+    p.style.cssText = 'text-align:center;color:#ff9ec7;margin:14px 0 0;font-size:14px';
+    p.textContent = '内嵌播放失败，请点上方"下载成片"。';
+    v.parentElement.appendChild(p);
+  });
+</script>
+</body>
+</html>
