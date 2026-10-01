@@ -1,0 +1,16 @@
+node_modules/
+
+# 中间产物：全部可由源码重新生成（配乐/旁白/分片/无声母版）
+build/
+
+# 抓帧与质检截图不入库
+out/frames/
+out/shots/
+out/smoke/
+out/**/*.mp4
+out/*.json
+
+# 成片与封面帧入库存放（上面的目录规则不会排除这两类文件名）
+!out/abstract-algebra-film_1080p.mp4
+!out/poster.png
+!out/endcard.png

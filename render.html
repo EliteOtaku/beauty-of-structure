@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>AA Film Render Page</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #000; overflow: hidden; }
+  #stage { display: block; width: 1920px; height: 1080px; }
+</style>
+</head>
+<body>
+<canvas id="stage" width="1920" height="1080"></canvas>
+<script type="module">
+import { clear, letterbox, text, FONT } from '/src/core.js';
+import * as S1 from '/src/scenes/s1_symmetry.js';
+import * as S2 from '/src/scenes/s2_cyclic.js';
+import * as S3 from '/src/scenes/s3_permutation.js';
+import * as S4 from '/src/scenes/s4_homomorphism.js';
+import * as S5 from '/src/scenes/s5_counting.js';
+import * as S6 from '/src/scenes/s6_finale.js';
+import * as FONTS from '/src/scenes/_fonts.js';
+import * as TEXTTEST from '/src/scenes/_texttest.js';
+import * as SMOKE from '/src/scenes/_smoke.js';
+
+const SCENES = { s1: S1, s2: S2, s3: S3, s4: S4, s5: S5, s6: S6, smoke: SMOKE, fonts: FONTS, texttest: TEXTTEST };
+
+const canvas = document.getElementById('stage');
+const ctx = canvas.getContext('2d', { alpha: false, desynchronized: false });
+const W = canvas.width, H = canvas.height;
+
+// 渲染状态
+const state = { scene: null, t: 0, frame: 0, portrait: false, quality: 'png' };
+
+function drawFrame(sceneKey, t, opts = {}) {
+  const mod = SCENES[sceneKey];
+  if (!mod) throw new Error('unknown scene: ' + sceneKey);
+  const scene = mod.default;
+  state.scene = sceneKey; state.t = t; state.frame = Math.round(t * 30); state.portrait = !!opts.portrait;
+
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.globalAlpha = 1;
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.filter = 'none';
+  clear(ctx, W, H, scene.base || '#05060d');
+
+  scene.draw({ ctx, W, H, t, d: scene.duration, frame: state.frame, core: mod });
+
+  // 统一收尾：黑边 + 署名水印（宣传片质感）
+  if (scene.letterbox !== false) {
+    const bars = opts.bars === undefined ? 56 : opts.bars;
+    letterbox(ctx, W, H, bars, 1);
+  }
+  if (opts.watermark !== false) {
+    text(ctx, '抽象代数 · 结构之美', 74, H - 92, {
+      size: 22, color: 'rgba(200,214,235,.42)', font: FONT.cjk, weight: 500, align: 'left', letter: 2,
+    });
+    text(ctx, String(state.frame).padStart(5, '0'), W - 74, H - 92, {
+      size: 20, color: 'rgba(200,214,235,.32)', font: FONT.mono, weight: 500, align: 'right', letter: 2,
+    });
+  }
+  return true;
+}
+
+/** 预热：让字体与贴图缓存建立，避免首帧抖动 */
+async function warmup() {
+  if (document.fonts && document.fonts.ready) await document.fonts.ready;
+  const keys = Object.keys(SCENES);
+  for (const k of keys) {
+    const d = SCENES[k].default.duration;
+    drawFrame(k, d * 0.5, { watermark: false });
+    drawFrame(k, d * 0.85, { watermark: false });
+  }
+  clear(ctx, W, H, '#000');
+  return keys.length;
+}
+
+// ---------------- 帧导出 ----------------
+function pngDataUrl() {
+  const url = canvas.toDataURL('image/png');
+  const i = url.indexOf(',');
+  return url.length - i - 1 + '|' + url.slice(i + 1) + '|' + url.slice(0, i);
+}
+
+/** 导出当前帧：'png' | 'jpeg'，返回 "字节数|base64|mime" 形式的紧凑串 */
+function exportFrame(kind = 'png', q = 0.94) {
+  if (kind === 'jpeg') {
+    const url = canvas.toDataURL('image/jpeg', q);
+    const i = url.indexOf(',');
+    return url.length - i - 1 + '|' + url.slice(i + 1) + '|image/jpeg';
+  }
+  return pngDataUrl();
+}
+
+window.__FILM__ = {
+  W, H,
+  scenes: () => Object.keys(SCENES).map((k) => ({ key: k, duration: SCENES[k].default.duration, title: SCENES[k].default.title })),
+  warmup,
+  drawFrame,
+  exportFrame,
+  render(kind, sceneKey, t, opts = {}) {
+    drawFrame(sceneKey, t, opts);
+    return exportFrame(kind, opts.q);
+  },
+  benchmark(sceneKey, t, n = 30, kind = 'png') {
+    const times = [];
+    for (let i = 0; i < n; i++) {
+      const t0 = performance.now();
+      drawFrame(sceneKey, t + i * 0.033, {});
+      exportFrame(kind);
+      times.push(performance.now() - t0);
+    }
+    return { avg: times.reduce((a, b) => a + b, 0) / n, max: Math.max(...times), min: Math.min(...times) };
+  },
+};
+window.__FILM_READY__ = true;
+</script>
+</body>
+</html>
